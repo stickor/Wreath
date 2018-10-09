@@ -12,10 +12,14 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-
+    var isLogin = Bool()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        
+        appLoginSet()
+        
+        
         return true
     }
 
@@ -40,6 +44,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
+    
+    func appLoginSet()  {
+        if isLogin {
+            let loginVC = LoginVC()
+            self.window?.rootViewController = loginVC;
+        }else{
+            let appVC = AppTabBarController()
+            self.window?.rootViewController = appVC
+        }
+        
+        
+    }
+    
 
 
 }

@@ -17,5 +17,5 @@ pod 'Kingfisher'
 # swift的Masonry
 pod 'SnapKit'
 #pod 'R.swift'
-
+pod 'BFKit-Swift'
 end
