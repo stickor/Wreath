@@ -83,14 +83,14 @@ public extension UIDevice {
     // MARK: - Variables
     
     /// Get OS version string.
-    public static var osVersion: String {
+    static var osVersion: String {
         return UIDevice.current.systemVersion
     }
     
     /// Returns OS version without subversions.
     ///
     /// Example: 9.
-    public static var osMajorVersion: Int {
+    static var osMajorVersion: Int {
         let subVersion = UIDevice.current.systemVersion.substring(to: ".")
         guard let intSubVersion = Int(subVersion) else {
             return 0
@@ -103,7 +103,7 @@ public extension UIDevice {
     /// Example: "iPhone7,2".
     ///
     /// - Returns: Returns the device platform string.
-    public static var hardwareModel: String {
+    static var hardwareModel: String {
         var name: [Int32] = [CTL_HW, HW_MACHINE]
         var nameCopy = name
         var size: Int = 2
@@ -123,7 +123,7 @@ public extension UIDevice {
     /// Example: "iPad Air (Cellular)".
     ///
     /// - Returns: Returns the user-friendly device platform string.
-    public static var detailedModel: String {
+    static var detailedModel: String {
         let platform: String = hardwareModel
         
         switch platform {
@@ -169,6 +169,12 @@ public extension UIDevice {
         // iPhone X
         case "iPhone10,3":      return "iPhone X"
         case "iPhone10,6":      return "iPhone X"
+        // iPhone XS / iPhone XS Max
+        case "iPhone11,2":      return "iPhone XS"
+        case "iPhone11,4":      return "iPhone XS Max"
+        case "iPhone11,6":      return "iPhone XS Max"
+        // iPhone XR
+        case "iPhone11,8":      return "iPhone XR"
         // iPod touch
         case "iPod1,1":         return "iPod touch (1st generation)"
         case "iPod2,1":         return "iPod touch (2nd generation)"
@@ -208,14 +214,23 @@ public extension UIDevice {
         // iPad Pro 9.7
         case "iPad6,3":         return "iPad Pro (9.7-inch)"
         case "iPad6,4":         return "iPad Pro (9.7-inch)"
+        // iPad Pro 10.5
+        case "iPad7,3":         return "iPad Pro (10.5-inch)"
+        case "iPad7,4":         return "iPad Pro (10.5-inch)"
+        // iPad Pro 11
+        case "iPad8,1":         return "iPad Pro (11-inch)"
+        case "iPad8,2":         return "iPad Pro (11-inch)"
+        case "iPad8,3":         return "iPad Pro (11-inch)"
+        case "iPad8,4":         return "iPad Pro (11-inch)"
         // iPad Pro 12.9
         case "iPad6,7":         return "iPad Pro (12.9-inch)"
         case "iPad6,8":         return "iPad Pro (12.9-inch)"
         case "iPad7,1":         return "iPad Pro (12.9-inch, 2nd generation)"
         case "iPad7,2":         return "iPad Pro (12.9-inch, 2nd generation)"
-        // iPad Pro 10.5
-        case "iPad7,3":         return "iPad Pro (10.5-inch)"
-        case "iPad7,4":         return "iPad Pro (10.5-inch)"
+        case "iPad8,5":         return "iPad Pro (12.9-inch, 3rd generation)"
+        case "iPad8,6":         return "iPad Pro (12.9-inch, 3rd generation)"
+        case "iPad8,7":         return "iPad Pro (12.9-inch, 3rd generation)"
+        case "iPad8,8":         return "iPad Pro (12.9-inch, 3rd generation)"
         // Apple TV
         case "AppleTV2,1":      return "Apple TV (2nd generation)"
         case "AppleTV3,1":      return "Apple TV (3rd generation)"
@@ -232,38 +247,38 @@ public extension UIDevice {
     // swiftlint:enable switch_case_on_newline
     
     /// Returns current device CPU frequency.
-    public static var cpuFrequency: Int {
+    static var cpuFrequency: Int {
         return getSysInfo(HW_CPU_FREQ)
     }
     
     /// Returns current device BUS frequency.
-    public static var busFrequency: Int {
+    static var busFrequency: Int {
         return getSysInfo(HW_TB_FREQ)
     }
     
     /// Returns device RAM size.
-    public static var ramSize: Int {
+    static var ramSize: Int {
         return getSysInfo(HW_MEMSIZE)
     }
     
     /// Returns device CPUs number.
-    public static var cpusNumber: Int {
+    static var cpusNumber: Int {
         return getSysInfo(HW_NCPU)
     }
     
     /// Returns device total memory.
-    public static var totalMemory: Int {
+    static var totalMemory: Int {
         return getSysInfo(HW_PHYSMEM)
     }
     
     /// Returns current device non-kernel memory.
-    public static var userMemory: Int {
+    static var userMemory: Int {
         return getSysInfo(HW_USERMEM)
     }
     
-    @available(iOS 9.0, *)
     /// Retruns if current device is running in low power mode.
-    public static var isLowPowerModeEnabled: Bool {
+    @available(iOS 9.0, *)
+    static var isLowPowerModeEnabled: Bool {
         return ProcessInfo.processInfo.isLowPowerModeEnabled
     }
     
@@ -272,11 +287,12 @@ public extension UIDevice {
     
     // MARK: - Functions
     
-    @objc @available(iOS 9.0, *)
     /// Executes a block everytime low power mode is enabled o disabled.
     ///
     /// - Parameter block: Block to be executed.
-    public static func lowPowerModeChanged(_ block: @escaping (_ isLowPowerModeEnabled: Bool) -> Void) {
+    @objc
+    @available(iOS 9.0, *)
+    static func lowPowerModeChanged(_ block: @escaping (_ isLowPowerModeEnabled: Bool) -> Void) {
         if !lowPowerModeObserver {
             NotificationCenter.default.addObserver(self, selector: #selector(lowPowerModeChanged(_:)), name: .NSProcessInfoPowerStateDidChange, object: nil)
             lowPowerModeObserver = true
@@ -288,49 +304,49 @@ public extension UIDevice {
     /// Check if current device is an iPhone.
     ///
     /// - Returns: Returns true if it is an iPhone, otherwise false.
-    public static func isPhone() -> Bool {
+    static func isPhone() -> Bool {
         return hardwareModel.substring(to: 6) == "iPhone"
     }
     
     /// Check if current device is an iPad.
     ///
     /// - Returns: Returns true if it is an iPad, otherwise false.
-    public static func isPad() -> Bool {
+    static func isPad() -> Bool {
         return hardwareModel.substring(to: 4) == "iPad"
     }
     
     /// Check if current device is an iPod.
     ///
     /// - Returns: Returns true if it is an iPod, otherwise false.
-    public static func isPod() -> Bool {
+    static func isPod() -> Bool {
         return hardwareModel.substring(to: 4) == "iPod"
     }
     
     /// Check if current device is an Apple TV.
     ///
     /// - Returns: Returns true if it is an Apple TV, otherwise false.
-    public static func isTV() -> Bool {
+    static func isTV() -> Bool {
         return hardwareModel.substring(to: 7) == "AppleTV"
     }
     
     /// Check if current device is an Applw Watch.
     ///
     /// - Returns: Returns true if it is an Apple Watch, otherwise false.
-    public static func isWatch() -> Bool {
+    static func isWatch() -> Bool {
         return hardwareModel.substring(to: 5) == "Watch"
     }
     
     /// Check if current device is a Simulator.
     ///
     /// - Returns: Returns true if it is a Simulator, otherwise false.
-    public static func isSimulator() -> Bool {
+    static func isSimulator() -> Bool {
         return detailedModel == "Simulator"
     }
     
     /// Returns if current device is jailbroken.
     ///
     /// - Returns: Returns true if current device is jailbroken, otherwise false.
-    public static func isJailbroken() -> Bool {
+    static func isJailbroken() -> Bool {
         let canReadBinBash = FileManager.default.fileExists(atPath: "/bin/bash")
         if let cydiaURL = URL(string: "cydia://"), let canOpenCydia = (UIApplication.value(forKey: "sharedApplication") as? UIApplication)?.canOpenURL(cydiaURL) {
             return canOpenCydia || canReadBinBash
@@ -342,21 +358,21 @@ public extension UIDevice {
     /// Returns system uptime.
     ///
     /// - Returns: eturns system uptime.
-    public static func uptime() -> TimeInterval {
+    static func uptime() -> TimeInterval {
         return ProcessInfo.processInfo.systemUptime
     }
     
     /// Returns sysyem uptime as Date.
     ///
     /// - Returns: Returns sysyem uptime as Date.
-    public static func uptimeDate() -> Date {
+    static func uptimeDate() -> Date {
         return Date(timeIntervalSinceNow: -uptime())
     }
     
     /// Returns current device total disk space
     ///
     /// - Returns: Returns current device total disk space.
-    public static func totalDiskSpace() -> NSNumber {
+    static func totalDiskSpace() -> NSNumber {
         do {
             let attributes = try FileManager.default.attributesOfFileSystem(forPath: NSHomeDirectory())
             return attributes[.systemSize] as? NSNumber ?? NSNumber(value: 0.0)
@@ -368,7 +384,7 @@ public extension UIDevice {
     /// Returns current device free disk space.
     ///
     /// - Returns: Returns current device free disk space.
-    public static func freeDiskSpace() -> NSNumber {
+    static func freeDiskSpace() -> NSNumber {
         do {
             let attributes = try FileManager.default.attributesOfFileSystem(forPath: NSHomeDirectory())
             return attributes[.systemFreeSize] as? NSNumber ?? NSNumber(value: 0.0)
@@ -400,7 +416,7 @@ public extension UIDevice {
     ///   - save: If true the UUID will be saved, otherview not.
     ///   - force: If true a new UUID will be forced, even there is a saved one.
     /// - Returns: Returns the created (`save` = false`) or retrieved (`save` = true) UUID String.
-    public static func generateUniqueIdentifier(save: Bool = false, force: Bool = false) -> String {
+    static func generateUniqueIdentifier(save: Bool = false, force: Bool = false) -> String {
         if save {
             let defaults = UserDefaults.standard
             
@@ -436,7 +452,7 @@ public extension UIDevice {
     ///   - needsUpdate:      Returns if the APNS token needsAnUpdate.
     ///   - oldUUID:          Returns the old UUID, if present. May be nil.
     ///   - newUUID:          Returns the new UUID.
-    public static func saveAPNSIdentifier(_ uniqueIdentifier: Any, completion: @escaping (_ isValid: Bool, _ needsUpdate: Bool, _ oldUUID: String?, _ newUUID: String) -> Void) {
+    static func saveAPNSIdentifier(_ uniqueIdentifier: Any, completion: @escaping (_ isValid: Bool, _ needsUpdate: Bool, _ oldUUID: String?, _ newUUID: String) -> Void) {
         var newUUID: String = ""
         var oldUUID: String?
         var isValid = false, needsUpdate = false

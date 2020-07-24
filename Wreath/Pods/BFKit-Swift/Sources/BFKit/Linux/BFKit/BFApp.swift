@@ -112,13 +112,13 @@ public enum BFApp {
         defaults.removeObject(forKey: key)
     }
     
-    @discardableResult
     /// Set the App setting for a given object and key. The file will be saved in the Library directory.
     ///
     /// - Parameters:
     ///   - object: Object to set.
     ///   - objectKey: Key to set the object.
     /// - Returns: Returns true if the operation was successful, otherwise false.
+    @discardableResult
     public static func setAppSetting(object: Any, forKey objectKey: String) -> Bool {
         return FileManager.default.setSettings(filename: BFApp.name, object: object, forKey: objectKey)
     }
@@ -130,6 +130,17 @@ public enum BFApp {
     public static func getAppSetting(objectKey: String) -> Any? {
         return FileManager.default.getSettings(filename: BFApp.name, forKey: objectKey)
     }
+    
+    /// Check if the app has been installed from TestFlight.
+    ///
+    /// - Returns: Returns `true` if the app has been installed via TestFlight, otherwise `false`.
+    public static func isFromTestFlight() -> Bool {
+        guard let appStoreReceiptURL = Bundle.main.appStoreReceiptURL else {
+            return false
+        }
+        
+        return appStoreReceiptURL.lastPathComponent == "sandboxReceipt"
+    }
 }
 
 // MARK: - BFApp extension
@@ -139,27 +150,27 @@ public extension BFApp {
     // MARK: - Variables
     
     /// Return the App name.
-    public static var name: String = {
+    static var name: String = {
         return BFApp.stringFromInfoDictionary(forKey: "CFBundleDisplayName")
     }()
     
     /// Returns the App version.
-    public static var version: String = {
+    static var version: String = {
         return BFApp.stringFromInfoDictionary(forKey: "CFBundleShortVersionString")
     }()
     
     /// Returns the App build.
-    public static var build: String = {
+    static var build: String = {
         return BFApp.stringFromInfoDictionary(forKey: "CFBundleVersion")
     }()
     
     /// Returns the App executable.
-    public static var executable: String = {
+    static var executable: String = {
         return BFApp.stringFromInfoDictionary(forKey: "CFBundleExecutable")
     }()
     
     /// Returns the App bundle.
-    public static var bundle: String = {
+    static var bundle: String = {
         return BFApp.stringFromInfoDictionary(forKey: "CFBundleIdentifier")
     }()
     

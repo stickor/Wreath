@@ -39,7 +39,6 @@ class MineVC: BaseVC {
                 print("成功"+"\(response)")
                 //let value = try response.mapNSArray()
                 //print("成功"+"\(value)")
-                
             } catch {
                 let printableError = error as CustomStringConvertible
                 print("失败"+"\(printableError.description)")

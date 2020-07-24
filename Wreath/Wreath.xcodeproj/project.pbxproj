@@ -23,6 +23,7 @@
 		FD02A1F8216C9AA1008AD683 /* SwiftFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD02A1F7216C9AA1008AD683 /* SwiftFile.swift */; };
 		FD02A1FD216CA4F5008AD683 /* BaseRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD02A1FC216CA4F5008AD683 /* BaseRequest.swift */; };
 		FD02A201216CAB02008AD683 /* MineRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD02A200216CAB02008AD683 /* MineRequest.swift */; };
+		FDCDA7CE21911ADF00FC1CD6 /* UserInfoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDCDA7CD21911ADF00FC1CD6 /* UserInfoModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -46,6 +47,7 @@
 		FD02A1F7216C9AA1008AD683 /* SwiftFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftFile.swift; sourceTree = "<group>"; };
 		FD02A1FC216CA4F5008AD683 /* BaseRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseRequest.swift; sourceTree = "<group>"; };
 		FD02A200216CAB02008AD683 /* MineRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MineRequest.swift; sourceTree = "<group>"; };
+		FDCDA7CD21911ADF00FC1CD6 /* UserInfoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -195,6 +197,7 @@
 		FD02A1EE216C8A8A008AD683 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				FDCDA7CC21911ABF00FC1CD6 /* Model */,
 				FD02A1EF216C8A8A008AD683 /* Base */,
 			);
 			path = Common;
@@ -242,6 +245,14 @@
 		FD02A1FB216C9F89008AD683 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		FDCDA7CC21911ABF00FC1CD6 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				FDCDA7CD21911ADF00FC1CD6 /* UserInfoModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -320,29 +331,16 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-Wreath/Pods-Wreath-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
-				"${BUILT_PRODUCTS_DIR}/BFKit-Swift/BFKit.framework",
-				"${BUILT_PRODUCTS_DIR}/HandyJSON/HandyJSON.framework",
-				"${BUILT_PRODUCTS_DIR}/Kingfisher/Kingfisher.framework",
-				"${BUILT_PRODUCTS_DIR}/Moya/Moya.framework",
-				"${BUILT_PRODUCTS_DIR}/Result/Result.framework",
-				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Wreath/Pods-Wreath-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/BFKit.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/HandyJSON.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Kingfisher.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Moya.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Result.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Wreath/Pods-Wreath-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Wreath/Pods-Wreath-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Wreath/Pods-Wreath-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		A61C381E0DA0E09E4E9C7F21 /* [CP] Check Pods Manifest.lock */ = {
@@ -379,6 +377,7 @@
 				FD02A1FD216CA4F5008AD683 /* BaseRequest.swift in Sources */,
 				FD02A1E9216C8552008AD683 /* LoginVC.swift in Sources */,
 				FD02A1E3216C82B7008AD683 /* OrderVC.swift in Sources */,
+				FDCDA7CE21911ADF00FC1CD6 /* UserInfoModel.swift in Sources */,
 				FD02A1CA216C75BF008AD683 /* ViewController.swift in Sources */,
 				FD02A201216CAB02008AD683 /* MineRequest.swift in Sources */,
 				FD02A1C8216C75BF008AD683 /* AppDelegate.swift in Sources */,

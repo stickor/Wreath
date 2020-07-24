@@ -46,13 +46,15 @@ open class BFButton: UIButton {
                     self?.overlayImageView.alpha = 1
                 }
             } else {
-                UIView.animate(withDuration: fadeDuration, animations: { [weak self] in
-                    self?.overlayImageView.alpha = 0
-                }, completion: { [weak self] completed in
-                    if completed {
-                        self?.overlayImageView.removeFromSuperview()
+                UIView.animate(
+                    withDuration: fadeDuration, animations: { [weak self] in
+                        self?.overlayImageView.alpha = 0
+                    }, completion: { [weak self] completed in
+                        if completed {
+                            self?.overlayImageView.removeFromSuperview()
+                        }
                     }
-                })
+                )
             }
         }
     }
@@ -80,7 +82,11 @@ open class BFButton: UIButton {
         super.init(coder: aDecoder)
         
         fadeDuration = aDecoder.decodeDouble(forKey: "FadeDuration")
-        overlayImageView = (aDecoder.decodeObject(forKey: "OverlayImageView") as! UIImageView) // swiftlint:disable:this force_cast
+        guard let decodedOverlayImageView = aDecoder.decodeObject(forKey: "OverlayImageView") as? UIImageView else {
+            return nil
+        }
+        
+        overlayImageView = decodedOverlayImageView
         overlayImageView.frame = imageView?.frame ?? CGRect.zero
         overlayImageView.bounds = imageView?.bounds ?? CGRect.zero
         
@@ -109,7 +115,7 @@ open class BFButton: UIButton {
         
         super.init(frame: frame)
         
-        setImage(image, for: UIControlState())
+        setImage(image, for: UIControl.State())
         overlayImageView = UIImageView(image: highlightedImage)
         overlayImageView.frame = imageView?.frame ?? CGRect.zero
         overlayImageView.bounds = imageView?.bounds ?? CGRect.zero

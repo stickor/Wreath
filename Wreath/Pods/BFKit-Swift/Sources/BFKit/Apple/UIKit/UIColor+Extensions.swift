@@ -81,60 +81,60 @@ public func RGB(_ red: Int, _ green: Int, _ blue: Int) -> Color {
 /// This extesion adds some useful functions to UIColor or NSColor.
 public extension Color {
     // MARK: - Variables
-    
+
     #if canImport(UIKit)
         /// RGB properties: red.
-        public var redComponent: CGFloat {
+        var redComponent: CGFloat {
             guard canProvideRGBComponents(), let component = cgColor.__unsafeComponents else {
                 return 0.0
             }
-            
+
             return component[0]
         }
-        
+
         /// RGB properties: green.
-        public var greenComponent: CGFloat {
+        var greenComponent: CGFloat {
             guard canProvideRGBComponents(), let component = cgColor.__unsafeComponents else {
                 return 0.0
             }
-            
+
             guard cgColor.colorSpace?.model == CGColorSpaceModel.monochrome else {
                 return component[1]
             }
             return component[0]
         }
-        
+
         /// RGB properties: blue.
-        public var blueComponent: CGFloat {
+        var blueComponent: CGFloat {
             guard canProvideRGBComponents(), let component = cgColor.__unsafeComponents else {
                 return 0.0
             }
-            
+
             guard cgColor.colorSpace?.model == CGColorSpaceModel.monochrome else {
                 return component[2]
             }
             return component[0]
         }
-    
+
         /// RGB properties: white.
-        public var whiteComponent: CGFloat {
+        var whiteComponent: CGFloat {
             guard cgColor.colorSpace?.model == CGColorSpaceModel.monochrome, let component = cgColor.__unsafeComponents else {
                 return 0.0
             }
-            
+
             return component[0]
         }
     #endif
-    
+
     /// RGB properties: luminance.
-    public var luminance: CGFloat {
+    var luminance: CGFloat {
         if canProvideRGBComponents() {
             var red: CGFloat = 0.0, green: CGFloat = 0.0, blue: CGFloat = 0.0, alpha: CGFloat = 0.0
-            
+
             #if canImport(UIKit)
                 getRed(&red, green: &green, blue: &blue, alpha: &alpha)
             #elseif canImport(AppKit)
-                if colorSpace.colorSpaceModel == .RGB {
+                if colorSpace.colorSpaceModel == .rgb {
                     getRed(&red, green: &green, blue: &blue, alpha: &alpha)
                 } else if colorSpace.colorSpaceModel == .gray {
                     var white: CGFloat = 0.0
@@ -144,80 +144,82 @@ public extension Color {
                     blue = white
                 }
             #endif
-            
+
             return red * 0.2126 + green * 0.7152 + blue * 0.0722
         }
         return 0.0
     }
-    
+
     /// RGBA properties: alpha.
-    public var alpha: CGFloat {
+    var alpha: CGFloat {
         return cgColor.alpha
     }
-    
+
     /// HSB properties: hue.
-    public var hue: CGFloat {
+    var hue: CGFloat {
         if canProvideRGBComponents() {
             var hue: CGFloat = 0.0, saturation: CGFloat = 0.0, brightness: CGFloat = 0.0, alpha: CGFloat = 0.0
-            
+
             getHue(&hue, saturation: &saturation, brightness: &brightness, alpha: &alpha)
             return hue
         }
         return 0.0
     }
-    
+
     /// HSB properties: saturation.
-    public var saturation: CGFloat {
+    var saturation: CGFloat {
         if canProvideRGBComponents() {
             var hue: CGFloat = 0.0, saturation: CGFloat = 0.0, brightness: CGFloat = 0.0, alpha: CGFloat = 0.0
-            
+
             getHue(&hue, saturation: &saturation, brightness: &brightness, alpha: &alpha)
             return saturation
         }
         return 0.0
     }
-    
+
     /// HSB properties: brightness.
-    public var brightness: CGFloat {
+    var brightness: CGFloat {
         if canProvideRGBComponents() {
             var hue: CGFloat = 0.0, saturation: CGFloat = 0.0, brightness: CGFloat = 0.0, alpha: CGFloat = 0.0
-            
+
             getHue(&hue, saturation: &saturation, brightness: &brightness, alpha: &alpha)
             return brightness
         }
         return 0.0
     }
-    
+
     /// Returns the HEX string from UIColor or NSColor.
-    public var hex: String {
-        var red: CGFloat = 0
-        var green: CGFloat = 0
-        var blue: CGFloat = 0
-        var alpha: CGFloat = 0
-        
+    var hex: String {
+        var red: CGFloat = 0.0
+        var green: CGFloat = 0.0
+        var blue: CGFloat = 0.0
+        var alpha: CGFloat = 0.0
+
         getRed(&red, green: &green, blue: &blue, alpha: &alpha)
-        
-        var rgb: Int = (Int)(red * 255) << 16 | (Int)(green * 255) << 8
-        rgb = rgb | (Int)(blue * 255) << 0
-        
+
+        let redInt = (Int)(red * 255)
+        let greenInt = (Int)(green * 255)
+        let blueInt = (Int)(blue * 255)
+        let rgb: Int = redInt << 16 | greenInt << 8 | blueInt << 0
+
         return String(format: "#%06x", rgb)
     }
-    
+
     // MARK: - Functions
-    
+
     /// Create a color from HEX with alpha.
     ///
     /// - Parameters:
     ///   - hex: HEX value.
     ///   - alpha: Alpha value.
-    public convenience init(hex: Int, alpha: CGFloat = 1.0) {
+    convenience init(hex: Int, alpha: CGFloat = 1.0) {
         #if canImport(UIKit)
             self.init(red: CGFloat(((hex & 0xFF0000) >> 16)) / 255.0, green: CGFloat(((hex & 0xFF00) >> 8)) / 255.0, blue: CGFloat((hex & 0xFF)) / 255.0, alpha: alpha)
         #elseif canImport(AppKit)
             self.init(calibratedRed: CGFloat(((hex & 0xFF0000) >> 16)) / 255.0, green: CGFloat(((hex & 0xFF00) >> 8)) / 255.0, blue: CGFloat((hex & 0xFF)) / 255.0, alpha: alpha)
         #endif
     }
-    
+
     /// Create a color from a HEX string.
     /// It supports the following type:
     /// - #ARGB, ARGB if alphaFirst is true. #RGBA, RGBA if alphaFirst is false.
@@ -228,10 +230,10 @@ public extension Color {
     /// - Parameters:
     ///   - hexString: HEX string.
     ///   - alphaFirst: Set it to true if alpha value is the first in the HEX string. If alpha value is the last one, set it to false. Default is false.
-    public convenience init(hex: String, alphaFirst: Bool = false) {
+    convenience init(hex: String, alphaFirst: Bool = false) {
         let colorString: String = hex.replacingOccurrences(of: "#", with: "").uppercased()
         var alpha: CGFloat = 1.0, red: CGFloat = 0.0, green: CGFloat = 0.0, blue: CGFloat = 0.0
-        
+
         switch colorString.count {
         case 3: /// RGB
             alpha = 1.0
@@ -267,30 +269,31 @@ public extension Color {
                 blue = Color.colorComponent(fromString: colorString, range: 4..<6)
                 alpha = Color.colorComponent(fromString: colorString, range: 6..<8)
             }
+
         default:
             break
         }
-        
+
         #if canImport(UIKit)
             self.init(red: red, green: green, blue: blue, alpha: alpha)
         #elseif canImport(AppKit)
             self.init(calibratedRed: red, green: green, blue: blue, alpha: alpha)
         #endif
     }
-    
+
     /// A good contrasting color, it will be either black or white.
     ///
     /// - Returns: Returns the color.
-    public func contrasting() -> Color {
+    func contrasting() -> Color {
         return luminance > 0.5 ? Color.black : Color.white
     }
-    
+
     /// A complementary color that should look good.
     ///
     /// - Returns: Returns the color.
-    public func complementary() -> Color? {
+    func complementary() -> Color? {
         var hue: CGFloat = 0.0, saturation: CGFloat = 0.0, brightness: CGFloat = 0.0, alpha: CGFloat = 0.0
-        
+
         #if canImport(UIKit)
             guard getHue(&hue, saturation: &saturation, brightness: &brightness, alpha: &alpha) else {
                 return nil
@@ -298,30 +301,31 @@ public extension Color {
         #elseif canImport(AppKit)
             getHue(&hue, saturation: &saturation, brightness: &brightness, alpha: &alpha)
         #endif
-        
+
         hue += 180
         if hue > 360 {
             hue -= 360
         }
-        
+
         return Color(hue: hue, saturation: saturation, brightness: brightness, alpha: alpha)
     }
-    
+
     /// Check if the color is in RGB format.
     ///
     /// - Returns: Returns if the color is in RGB format.
-    public func canProvideRGBComponents() -> Bool {
+    func canProvideRGBComponents() -> Bool {
         guard let colorSpace = cgColor.colorSpace else {
             return false
         }
         switch colorSpace.model {
         case CGColorSpaceModel.rgb, CGColorSpaceModel.monochrome:
             return true
+
         default:
             return false
         }
     }
-    
+
     /// Returns the color component from the string.
     ///
     /// - Parameters:
@@ -334,27 +338,27 @@ public extension Color {
         let fullHex = (range.upperBound - range.lowerBound) == 2 ? substring : "\(substring)\(substring)"
         var hexComponent: CUnsignedInt = 0
         Scanner(string: fullHex).scanHexInt32(&hexComponent)
-        
+
         return CGFloat(hexComponent) / 255.0
     }
-    
+
     /// Create a random color.
     ///
     /// - Parameter alpha: Alpha value.
     /// - Returns: Returns the UIColor or NSColor instance.
-    public static func random(alpha: CGFloat = 1.0) -> Color {
-        let red: Int = randomInt(range: 0...255)
-        let green: Int = randomInt(range: 0...255)
-        let blue: Int = randomInt(range: 0...255)
-        
+    static func random(alpha: CGFloat = 1.0) -> Color {
+        let red = Int.random(in: 0...255)
+        let green = Int.random(in: 0...255)
+        let blue = Int.random(in: 0...255)
+
         return Color(red: CGFloat(red) / 255.0, green: CGFloat(green) / 255.0, blue: CGFloat(blue) / 255.0, alpha: alpha)
     }
-    
+
     /// Create an UIColor or NSColor from a given string. Example: "blue" or hex string.
     ///
     /// - Parameter color: String with color.
     /// - Returns: Returns the created UIColor or NSColor.
-    public static func color(string color: String) -> Color {
+    static func color(string color: String) -> Color {
         if color.count >= 3 {
             if Color.responds(to: Selector(color.lowercased() + "Color")) {
                 return convertColor(string: color)
@@ -365,12 +369,12 @@ public extension Color {
             return Color.black
         }
     }
-    
+
     #if canImport(UIKit)
         /// Create an UIColor from a given string like "blue" or an hex string.
         ///
         /// - Parameter color: String with color.
-        public convenience init(string color: String) {
+        convenience init(string color: String) {
             if UIColor.responds(to: Selector(color.lowercased() + "Color")) {
                 self.init(cgColor: UIColor.convertColor(string: color).cgColor)
             } else {
@@ -381,7 +385,7 @@ public extension Color {
         /// Create a NSColor from a given string like "blue" or an hex string.
         ///
         /// - Parameter color: String with color.
-        public convenience init?(string color: String) {
+        convenience init?(string color: String) {
             if NSColor.responds(to: Selector(color.lowercased() + "Color")) {
                 self.init(cgColor: NSColor.convertColor(string: color).cgColor)
             } else {
@@ -389,14 +393,14 @@ public extension Color {
             }
         }
     #endif
-    
+
     /// Used the retrive the color from the string color ("blue" or "red").
     ///
     /// - Parameter color: String with the color.
     /// - Returns: Returns the created UIColor or NSColor.
     private static func convertColor(string color: String) -> Color {
         let color = color.lowercased()
-        
+
         switch color {
         case "black":
             return Color.black
@@ -428,18 +432,19 @@ public extension Color {
             return Color.brown
         case "clear":
             return Color.clear
+
         default:
             return Color.clear
         }
     }
-    
+
     /// Creates and returns a color object that has the same color space and component values as the given color, but has the specified alpha component.
     ///
     /// - Parameters:
     ///   - color: UIColor or NSColor value.
     ///   - alpha: Alpha value.
     /// - Returns: Returns an UIColor or NSColor instance.
-    public static func color(color: Color, alpha: CGFloat) -> Color {
+    static func color(color: Color, alpha: CGFloat) -> Color {
         return color.withAlphaComponent(alpha)
     }
 }
